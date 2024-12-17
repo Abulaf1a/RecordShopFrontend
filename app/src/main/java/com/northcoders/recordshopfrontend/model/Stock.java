@@ -1,17 +1,17 @@
 package com.northcoders.recordshopfrontend.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
 public class Stock {
 
     long id;
 
-    int quantity; 
+    int quantity;
+
+    public Stock(long id, int quantity) {
+        this.id = id;
+        this.quantity = quantity;
+    }
+
+    public Stock() {
+    }
 }

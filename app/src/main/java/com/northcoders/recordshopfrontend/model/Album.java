@@ -1,15 +1,8 @@
 package com.northcoders.recordshopfrontend.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
+
+
 public class Album {
 
     //JSON structure
@@ -38,4 +31,15 @@ public class Album {
     Stock stock;
 
 
+    public Album(long id, String title, int releaseYear, String artist, String genre, Stock stock) {
+        this.id = id;
+        this.title = title;
+        this.releaseYear = releaseYear;
+        this.artist = artist;
+        this.genre = genre;
+        this.stock = stock;
+    }
+
+    public Album() {
+    }
 }
