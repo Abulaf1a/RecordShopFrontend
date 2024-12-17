@@ -1,7 +1,7 @@
 package com.northcoders.recordshopfrontend.model;
 
 
-
+import androidx.databinding.Bindable;
 
 public class Album {
 
@@ -41,5 +41,55 @@ public class Album {
     }
 
     public Album() {
+    }
+
+    //if any field names differ from model attribute names, use @SerializedName(value = "")
+    @Bindable
+    public long getId() {
+        return id;
+    }
+    @Bindable
+    public String getTitle() {
+        return title;
+    }
+    @Bindable
+    public int getReleaseYear() {
+        return releaseYear;
+    }
+    @Bindable
+    public String getArtist() {
+        return artist;
+    }
+    @Bindable
+    public String getGenre() {
+        return genre;
+    }
+    @Bindable
+    public Stock getStock() {
+        return stock;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setReleaseYear(int releaseYear) {
+        this.releaseYear = releaseYear;
+    }
+
+    public void setArtist(String artist) {
+        this.artist = artist;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+
+    public void setStock(Stock stock) {
+        this.stock = stock;
     }
 }
