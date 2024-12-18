@@ -2,6 +2,7 @@ package com.northcoders.recordshopfrontend.model;
 
 
 import android.graphics.Color;
+import android.util.Log;
 
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
@@ -85,6 +86,10 @@ public class Album extends BaseObservable {
                 colour = "#EC00FF";
 
                 break;
+
+            default:
+
+                Log.i("GENRE COLOUR ERROR", "No colour assigned for genre " + genre);
         }
         return Color.parseColor(colour);
 
