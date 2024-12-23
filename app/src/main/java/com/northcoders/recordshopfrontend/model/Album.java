@@ -1,29 +1,15 @@
 package com.northcoders.recordshopfrontend.model;
 
-
-import android.graphics.Color;
-import android.util.Log;
-
+import android.os.Parcel;
+import android.os.Parcelable;
+import androidx.annotation.NonNull;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 import androidx.databinding.library.baseAdapters.BR;
 
-public class Album extends BaseObservable {
+public class Album extends BaseObservable implements Parcelable {
 
-    //JSON structure
-    /*
-        "id": 1,
-        "title": " ",
-        "releaseYear": ,
-        "artist": "",
-        "genre": "POP",
-        "stock": {
-            "id": 1,
-            "quantity": 22
-        }
-    */
-
-    long id;
+    Long id;
 
     String title;
 
@@ -31,14 +17,13 @@ public class Album extends BaseObservable {
 
     String artist;
 
-    String imgUrl;
-
     String genre;
+
+    String imgUrl;
 
     Stock stock;
 
-
-    public Album(long id, String title, int releaseYear, String artist, String genre , Stock stock, String imgUrl) {
+    public Album(Long id, String title, int releaseYear, String artist, String genre , Stock stock, String imgUrl) {
         this.id = id;
         this.title = title;
         this.releaseYear = releaseYear;
@@ -51,18 +36,46 @@ public class Album extends BaseObservable {
     public Album() {
     }
 
-    //if any field names differ from model attribute names, use @SerializedName(value = "")
+
+    protected Album(Parcel in) {
+        id = in.readLong();
+        title = in.readString();
+        releaseYear = in.readInt();
+        artist = in.readString();
+        genre = in.readString();
+        imgUrl = in.readString();
+        stock = in.readParcelable(Stock.class.getClassLoader(), Stock.class);
+    }
+
+    public static final Creator<Album> CREATOR = new Creator<Album>() {
+        @Override
+        public Album createFromParcel(Parcel in) {
+            return new Album(in);
+        }
+
+        @Override
+        public Album[] newArray(int size) {
+            return new Album[size];
+        }
+    };
+
     @Bindable
-    public long getId() {
+    public long getId(){
         return id;
     }
+
+    public void setId(Long id){
+        this.id = id;
+        notifyPropertyChanged(BR.id);
+    }
+
     @Bindable
     public String getTitle() {
         return title;
     }
     @Bindable
-    public int getReleaseYear() {
-        return releaseYear;
+    public String getReleaseYear() {
+        return String.valueOf(releaseYear);
     }
     @Bindable
     public String getArtist() {
@@ -74,34 +87,8 @@ public class Album extends BaseObservable {
     }
 
     @Bindable
-    public int getColour(){
-        String colour = "#FFFFFF";
-        switch (genre){
-            case "POP":
-                colour = "#B300FF";
-                break;
-
-            case "ROCK":
-
-                colour = "#EC00FF";
-
-                break;
-
-            default:
-
-                Log.i("GENRE COLOUR ERROR", "No colour assigned for genre " + genre);
-        }
-        return Color.parseColor(colour);
-
-    }
-    @Bindable
     public Stock getStock() {
         return stock;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-        this.notifyPropertyChanged(BR.id);
     }
 
     public void setTitle(String title) {
@@ -109,8 +96,13 @@ public class Album extends BaseObservable {
         this.notifyPropertyChanged(BR.title);
     }
 
-    public void setReleaseYear(int releaseYear) {
-        this.releaseYear = releaseYear;
+    public void setReleaseYear(String releaseYear) {
+        if(releaseYear.isEmpty()){
+            this.releaseYear = 0;
+        }
+        else{
+            this.releaseYear = Integer.parseInt(releaseYear);
+        }
         this.notifyPropertyChanged(BR.releaseYear);
     }
 
@@ -137,5 +129,41 @@ public class Album extends BaseObservable {
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
         this.notifyPropertyChanged(BR.imgUrl);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(title);
+        dest.writeInt(releaseYear);
+        dest.writeString(artist);
+        dest.writeString(genre);
+        dest.writeString(imgUrl);
+        dest.writeParcelable(stock, flags);
+    }
+
+    @Override
+    public String toString() {
+        String stockStr = "null";
+
+        if(stock != null){
+             stockStr = getStock().toString();
+
+        }
+
+        return "Album{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", releaseYear=" + releaseYear +
+                ", artist='" + artist + '\'' +
+                ", genre='" + genre + '\'' +
+                ", imgUrl='" + imgUrl + '\'' +
+                ", stock=" + stockStr +
+                '}';
     }
 }

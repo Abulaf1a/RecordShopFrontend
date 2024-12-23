@@ -3,6 +3,7 @@ package com.northcoders.recordshopfrontend.ui.mainactivity;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -13,10 +14,10 @@ import com.bumptech.glide.Glide;
 import com.northcoders.recordshopfrontend.R;
 import com.northcoders.recordshopfrontend.databinding.AlbumItemBinding;
 import com.northcoders.recordshopfrontend.model.Album;
-import com.northcoders.recordshopfrontend.model.AlbumRepository;
+import com.northcoders.recordshopfrontend.ui.bindingadapters.GenreColorBindingAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder> {
 
@@ -26,9 +27,14 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumViewHol
 
     Context context;
 
-    public AlbumAdapter(List<Album> albums, Context context) {
+    private RecyclerViewInterface recyclerViewInterface;
+
+    MainActivityClickHandler clickHandler;
+
+    public AlbumAdapter(List<Album> albums, Context context,  MainActivityClickHandler clickHandler) {
         this.albums = albums;
         this.context = context;
+        this.clickHandler = clickHandler;
 
     }
 
@@ -45,7 +51,8 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumViewHol
                 R.layout.album_item,
                 parent,
                 false);
-        return new AlbumViewHolder(albumItemBinding);
+
+        return new AlbumViewHolder(albumItemBinding, recyclerViewInterface);
     }
 
     /*
@@ -58,13 +65,28 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumViewHol
     @Override
     public void onBindViewHolder(@NonNull AlbumViewHolder holder, int position) {
 
+        Log.i("PETER", "ALBUMS size in onBindViewHolder = " + albums.size());
+
         Album album = albums.get(position);
 
-        Glide.with(context)
-        .load(album.getImgUrl())
-        .into(holder.albumItemBinding.albumArt);
+        if(album.getImgUrl() == null || album.getImgUrl().isEmpty()){
+            Glide.with(context)
+                    .load(R.drawable.question)
+                    .into(holder.albumItemBinding.albumArt);
+        }
+        else{
+            Glide.with(context)
+                    .load(album.getImgUrl())
+                    .into(holder.albumItemBinding.albumArt);
+        }
 
         holder.albumItemBinding.setAlbum(album);
+
+        GenreColorBindingAdapter colourAdapter = new GenreColorBindingAdapter(context);
+
+        holder.albumItemBinding.setColourAdapter(colourAdapter);
+
+        holder.albumItemBinding.setClickHandler(clickHandler);
 
     }
 
@@ -77,20 +99,26 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumViewHol
         return albums.size();
     }
 
+    public void setFilteredAlbums(List<Album> filteredAlbums){
+        Log.i("PETER", "FILTERED ITEMS = " + filteredAlbums.size());
+        albums = filteredAlbums;
+        Log.i("PETER", "ALBUMS = " + albums.size());
+    }
 
+    /*
+           The ViewHolder is a Java class that stores the reference
+           to the card layout views that have to be dynamically modified
+           during the execution of the program by a list of data
+           obtained either by online databases or added in some other
+           way. In this case, it will be from the HTTP call to the backend API.
+           */
     public static class AlbumViewHolder extends RecyclerView.ViewHolder{
-
-        /*
-        The ViewHolder is a Java class that stores the reference
-        to the card layout views that have to be dynamically modified
-        during the execution of the program by a list of data
-        obtained either by online databases or added in some other
-        way. In this case, it will be from the HTTP call to the backend API.
-        */
 
         private AlbumItemBinding albumItemBinding;
 
-        public AlbumViewHolder(AlbumItemBinding albumItemBinding){
+
+
+        public AlbumViewHolder(AlbumItemBinding albumItemBinding, RecyclerViewInterface recyclerViewInterface){
             super(albumItemBinding.getRoot());
             this.albumItemBinding = albumItemBinding;
         }

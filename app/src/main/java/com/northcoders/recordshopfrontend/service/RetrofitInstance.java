@@ -1,5 +1,7 @@
 package com.northcoders.recordshopfrontend.service;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.northcoders.recordshopfrontend.model.Album;
 
 import java.util.List;
@@ -18,14 +20,13 @@ public class RetrofitInstance {
 
     public static AlbumApiService getService(){
 
-
+        //HTTP logging - just needed for development to get the logs into logcat
         HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
         httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .addInterceptor(httpLoggingInterceptor)
                 .build();
-
 
         if(retrofit == null){
 
@@ -34,8 +35,6 @@ public class RetrofitInstance {
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(okHttpClient)
                     .build();
-
-
         }
 
         return retrofit.create(AlbumApiService.class);

@@ -2,4 +2,10 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="genrePop">#AB1AB4</color>
+    <color name="genreRock">#6600FF</color>
+    <color name="genreIndie">#FCFF00</color>
+    <color name="genreHipHop">#2FFF00</color>
+    <color name="genreSoul">#752862</color>
+    <color name="genreFunk">#FF0000</color>
 </resources>
